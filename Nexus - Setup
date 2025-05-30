@@ -1,0 +1,44 @@
+STEP-1: CREATE A Nexus SERVER WITH T2.MEDIUM AND 30 GB EBS volume
+
+STEP-2: EXECUTE THE BELOW SCRIPT ON Nexus SERVER
+
+wget https://download.sonatype.com/nexus/3/nexus-unix-x86-64-3.79.0-09.tar.gz
+tar -zxvf nexus-unix-x86-64-3.79.0-09.tar.gz
+yum install java-17-amazon-corretto -y
+sudo useradd nexus
+chown -R  nexus:nexus  nexus-3.79.0-09
+sudo sh nexus-3.79.0-09/bin/nexus start
+
+
+STEP-3: CONFIGURE NEXUS SERVER
+copy-public-ip:8081 (In browser)
+
+signin -- > username: admin & password: we'll get from --> cat /app/sonatype-work/nexus3/admin.password (in terminal)-- > next -- > set password -- > disable anonymous access -- > save
+
+CREATING REPO:
+settings symbol -- > repositories -- > new -- > maven2(hosted) -- > give any name -- > save
+
+NOTE: to integrate any tool with Jenkins we need to download the plugin. (compulsory we need this plugin for working nexus with jenkins)
+If working with S3, then the tool is "S3 publisher" and "Artifact Manager on S3". (For S3 with Jenkins)
+
+STEP-4: INTEGRATING NEXUS TO PIPELINE
+
+NEXUS INTEGRATION TO PIPELINE:
+1. Download the plugins (Nexus Artifact Uploader) (S3 Publisher) (Arifact Manager on S3)
+Manage Jenkins -- > plugins -- > Available Plugins -- > Nexus Artifact Uploader -- > install.
+
+2. Creating credentials 
+Dashboard
+Manage Jenkins
+Credentials
+global
+Add creds
+username and password
+create
+
+3. Configure it to pipeline code by using pipeline syntax and also add credentials.
+search for nexus
+and fill the details
+
+NOTE: The details of information will be available on pom.xml file. (jenkins-java-project GitHub repo)
+
